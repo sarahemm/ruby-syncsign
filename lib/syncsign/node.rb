@@ -12,6 +12,10 @@ module SyncSign
       @signal = signal
     end
 
+    def render(template: nil)
+      @service.api_call(type: :post, path: "/nodes/#{@id}/renders", data: template.to_s)
+    end
+
     def self.parse(service: nil, nodeinfo: nil)
       Node.new(
         service: service,

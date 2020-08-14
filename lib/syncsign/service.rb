@@ -2,6 +2,9 @@ require 'net/http'
 require 'json'
 
 module SyncSign
+  class APICallException < StandardError
+  end
+
   class Service
     def initialize(apikey: null)
       @apikey = apikey
@@ -50,7 +53,9 @@ module SyncSign
         end
         response = http.request(req)
       end
-      # TODO: handle failure
+      if(response.code.to_i != 200) then
+        raise APICallException, response.read_body
+      end
       JSON.parse(response.read_body)['data']
     end
   end
