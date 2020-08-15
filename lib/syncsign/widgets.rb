@@ -44,14 +44,15 @@ module SyncSign
       end
       
       def to_a
-        out = {}
-        out['type'] = 'RECTANGLE'
-        out['data'] = {}
-        out['data']['block'] = {x: @x, y: @y, w: @width, h: @height}
-        out['data']['fillColor'] = @bgcolour
-        out['data']['strokeColor'] = @colour
-        out['data']['strokeThickness'] = @pen_width
-        out
+        {
+          'type': 'RECTANGLE',
+          'data': {
+            'block': {x: @x, y: @y, w: @width, h: @height},
+            'fillColor': @bgcolour,
+            'strokeColor': @colour,
+            'strokeThickness': @pen_width
+          }
+        }
       end
     end
 
@@ -71,16 +72,16 @@ module SyncSign
       end
 
       def to_a
-        out = {}
-        out['type'] = 'TEXT'
-        out['data'] = {}
-        out['data']['font'] = "#{@font}_#{@size.to_s}"
-        out['data']['block'] = {x: @x, y: @y, w: @width, h: @height}
-        out['data']['textColor'] = @colour
-        out['data']['textAlign'] = @align
-        out['data']['text'] = @text
-        
-        out
+        {
+          'type': 'TEXT',
+          'data': {
+            'block': {x: @x, y: @y, w: @width, h: @height},
+            'textColor': @colour,
+            'textAlign': @align,
+            'font': "#{@font}_#{@size.to_s}",
+            'text': @text
+          }
+        }
       end
     end
 
@@ -95,16 +96,16 @@ module SyncSign
       end
 
       def to_a
-        out = {}
-        out['type'] = 'QRCODE'
-        out['data'] = {}
-        out['data']['scale'] = @scale
-        out['data']['ecclevel'] = @ecclevel.to_s.upcase
-        out['data']['version'] = @version
-        out['data']['position'] = {x: @x, y: @y}
-        out['data']['text'] = @text
-        
-        out
+        {
+          'type': 'QRCODE',
+          'data': {
+            'scale': @scale,
+            'eccLevel': @ecclevel.to_s.upcase,
+            'version': @version,
+            'position': {x: @x, y: @y},
+            'text': @text
+          }
+        }
       end
     end
   end
