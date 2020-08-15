@@ -60,6 +60,7 @@ module SyncSign
 
       def initialize(x: nil, y: nil, width: nil, height: nil, colour: :black, bgcolour: :white, font: nil, size: nil, bold: false, id: nil, align: :left, text: nil)
         raise(AlignmentException, "Textbox: either y or height must be a multiple of 8") if y % 8 != 0 and height % 8 != 0
+        raies(AlignmentException, "Textbox: width must be a multiple of 8") if width % 8 != 0
         @font = font.upcase
         @size = size
         @bold = bold
@@ -75,6 +76,7 @@ module SyncSign
         out['data'] = {}
         out['data']['font'] = "#{@font}_#{@size.to_s}"
         out['data']['block'] = {x: @x, y: @y, w: @width, h: @height}
+        out['data']['textColor'] = @colour
         out['data']['textAlign'] = @align
         out['data']['text'] = @text
         # TODO: support the rest
