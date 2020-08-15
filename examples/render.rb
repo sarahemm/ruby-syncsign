@@ -16,7 +16,8 @@ background = {
 
 items = [
   SyncSign::Widget::Rectangle.new(x: 8, y: 8, width: 208, height: 60),
-  SyncSign::Widget::Textbox.new(x: 16, y: 16, width: 192, height: 44, font: :roboto_slab, size: 24, align: :center, text: "Hello, World!")
+  SyncSign::Widget::Textbox.new(x: 16, y: 16, width: 192, height: 44, font: :roboto_slab, size: 24, align: :center, text: "Hello, World!"),
+  SyncSign::Widget::QRCode.new(x: 232, y: 72, scale: 2, text: "Hello, World!")
 ]
 
 signsvc = SyncSign::Service.new(apikey: ARGV[0])

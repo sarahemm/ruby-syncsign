@@ -79,7 +79,30 @@ module SyncSign
         out['data']['textColor'] = @colour
         out['data']['textAlign'] = @align
         out['data']['text'] = @text
-        # TODO: support the rest
+        
+        out
+      end
+    end
+
+    class QRCode < Item
+      def initialize(x: nil, y: nil, scale: 4, version: 2, ecclevel: :medium, text: nil)
+        @scale = scale
+        @version = version
+        @ecclevel = ecclevel
+        @text = text
+
+        super(x: x, y: y)
+      end
+
+      def to_a
+        out = {}
+        out['type'] = 'QRCODE'
+        out['data'] = {}
+        out['data']['scale'] = @scale
+        out['data']['ecclevel'] = @ecclevel.to_s.upcase
+        out['data']['version'] = @version
+        out['data']['position'] = {x: @x, y: @y}
+        out['data']['text'] = @text
         
         out
       end
