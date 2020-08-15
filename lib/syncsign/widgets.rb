@@ -56,6 +56,58 @@ module SyncSign
       end
     end
 
+    class Line
+      attr_accessor :x0, :y0, :x1, :y1, :bgcolour, :colour, :pattern
+
+      def initialize(x0: nil, y0: nil, x1: nil, y1: nil, bgcolour: :white, colour: :black, pattern: :solid)
+        @x0 = x0
+        @y0 = y0
+        @x1 = x1
+        @y1 = y1
+        @colour = colour.to_s.upcase
+        @bgcolour = bgcolour.to_s.upcase
+        @pattern = pattern.to_s.upcase
+      end
+      
+      def to_a
+        {
+          'type': 'LINE',
+          'data': {
+            'block': {x0: @x0, y0: @y0, x1: @x1, y1: @y1},
+            'backgroundColor': @bgcolour,
+            'lineColor': @colour,
+            'linePattern': @pattern
+          }
+        }
+      end
+    end
+
+    class Circle < Item
+      attr_accessor :radius, :bgcolour, :colour, :pattern
+
+      def initialize(x: nil, y: nil, radius: nil, bgcolour: :white, colour: :black, fillpattern: :hollow, strokepattern: :solid)
+        @radius = radius
+        @colour = colour.to_s.upcase
+        @bgcolour = bgcolour.to_s.upcase
+        @fillpattern = fillpattern.to_s.upcase
+        @strokepattern = strokepattern.to_s.upcase
+        super(x: x, y:y)
+      end
+      
+      def to_a
+        {
+          'type': 'CIRCLE',
+          'data': {
+            'center': {x: @x, y: @y},
+            'fillColor': @bgcolour,
+            'fillPattern': @fillpattern,
+            'strokeColor': @colour,
+            'strokePattern': @strokepattern
+          }
+        }
+      end
+    end
+
     class Textbox < ColourBox
       attr_accessor :font, :size, :bold, :id, :align, :text
 
@@ -86,6 +138,8 @@ module SyncSign
     end
 
     class QRCode < Item
+      attr_accessor :scale, :version, :ecclevel, :text
+      
       def initialize(x: nil, y: nil, scale: 4, version: 2, ecclevel: :medium, text: nil)
         @scale = scale
         @version = version
