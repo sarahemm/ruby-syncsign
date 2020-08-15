@@ -15,29 +15,15 @@ background = {
 }
 
 items = [
-  SyncSign::Widget::Textbox.new(x: 10, y: 10, w: 200, h: 100, font: :roboto_slab, text: "Hello, World!"),
-  SyncSign::Widget::Rectangle.new(x: 0, y: 0, w: 220, h: 120)
+  SyncSign::Widget::Rectangle.new(x: 8, y: 8, width: 208, height: 60),
+  SyncSign::Widget::Textbox.new(x: 16, y: 16, width: 192, height: 44, font: :roboto_slab, size: 24, align: :center, text: "Hello, World!")
 ]
 
-#items = [
-#  'type': 'TEXT',
-#  'data': {
-#    'font': 'ROBOTO_SLAB_24',
-#    'block': {
-#      'x': 0,
-#      'y': 0,
-#      'w': 200,
-#      'h': 100
-#    },
-#    'text': "Hello, World!"
-#  }
-#]
-
-#signsvc = SyncSign::Service.new(apikey: ARGV[0])
+signsvc = SyncSign::Service.new(apikey: ARGV[0])
 tmpl = SyncSign::Template.new(
   background: background,
   items: items
 )
 puts tmpl.to_s
-#signsvc.node(ARGV[1]).render(template: tmpl)
+signsvc.node(ARGV[1]).render(template: tmpl)
 
