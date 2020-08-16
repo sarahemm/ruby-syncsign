@@ -13,7 +13,7 @@ end
 signsvc = SyncSign::Service.new(apikey: ARGV[0])
 signsvc.nodes.each do |node|
   puts "Node #{node.id}: #{node.name || '(unnamed)'}"
-  puts "\tModel: #{node.model}"
+  puts "\tModel: #{node.model} (#{node.class.to_s})"
   puts "\tHas Colour: #{node.has_colour? ? "Yes" : "No"}"
   puts "\tIs Online: #{node.is_online? ? "Yes" : "No"}"
   puts "\tBattery: #{node.battery || 'Unavailable'}"

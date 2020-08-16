@@ -27,19 +27,6 @@ module SyncSign
     end
 
     ##
-    # Render a template to this display.
-    # @param template [Template] Template to render to this display.
-    def render(template: nil)
-      @service.api_call(type: :post, path: "/nodes/#{@id}/renders", data: template.to_s)
-    end
-
-    ##
-    # Return true if the node can display a colour other than black and white.
-    def has_colour?
-      ['D29R', 'D75'].include? @model
-    end
-
-    ##
     # Return true if the node was online during the last information gathering.
     def is_online?
       @online
@@ -50,7 +37,13 @@ module SyncSign
     # Normally only called from Hub#nodes or Service#nodes.
     # @api private
     def self.parse(service: nil, nodeinfo: nil)
-      Node.new(
+      node_class = Node
+      case nodeinfo['type']
+        when 'DISPLAY'
+          node_class = Display
+        # TODO: support sensors and any other node types
+      end
+      node_class.new(
         service: service,
         id: nodeinfo['nodeId'],
         name: nodeinfo['name'],
@@ -73,7 +66,7 @@ module SyncSign
       nodeinfo.each do |node|
         nodes.push Node::parse(service: service, nodeinfo: node)
       end
-
+p nodes
       nodes
     end
   end
