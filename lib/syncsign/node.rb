@@ -11,8 +11,6 @@ module SyncSign
     attr_reader :battery
     # @return [Integer] the current signal level of this node (0-100)
     attr_reader :signal
-    # @return [Boolean] whether the node is online or offline.
-    attr_reader :online
     # @return [String] model of thid node.
     attr_reader :model
 
@@ -36,9 +34,15 @@ module SyncSign
     end
 
     ##
-    # Return true if the node can display a colour other than black and white
+    # Return true if the node can display a colour other than black and white.
     def has_colour?
       ['D29R', 'D75'].include? @model
+    end
+
+    ##
+    # Return true if the node was online during the last information gathering.
+    def is_online?
+      @online
     end
 
     ##
