@@ -228,6 +228,10 @@ module SyncSign
         }
       end
 
+      # Check a font/size combination to make sure it's valid.
+      # Will raise ArgumentError if the font, size, or combination isn't supported..
+      # @param font [Symbol] A symbol to check, representing a font.
+      # @param size [Integer] A font size to check.
       def check_font(font: nil, size: nil)
         available_sizes = {
           :ddin => [16, 24, 32, 48, 64, 128],
@@ -306,6 +310,10 @@ module SyncSign
       end
     end
 
+    ##
+    # Check a set of colours to make sure they're all valid.
+    # Will raise ArgumentError if any elements are not valid colours.
+    # @param colours [Array] An array of symbols to check.
     def self.check_colours(colours)
       colours.each do |colour|
         next if [:white, :black, :red].include? colour
@@ -313,6 +321,9 @@ module SyncSign
       end
     end
     
+    # Check a set of patterns to make sure they're all valid.
+    # Will raise ArgumentError if any elements are not valid patterns.
+    # @param patterns [Array] An array of symbols to check.
     def self.check_patterns(patterns)
       patterns.each do |pattern|
         next if [:solid, :interleave, :dash_tiny, :dash_medium, :dash_wide, :none].include? pattern

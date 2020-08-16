@@ -10,7 +10,7 @@ module SyncSign
 
     ##
     # Initialize a new template and optionally add items to it.
-    # @param background [Hash] TODO
+    # @param bgcolour [Symbol] Background colour, one of :black, :white, or :red.
     # @param items [Array] List of Widgets to add to the template.
     # @param pollrate [Integer] How often (in ms) the node should poll the hub
     #   for new information.
