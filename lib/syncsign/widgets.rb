@@ -186,7 +186,7 @@ module SyncSign
     ##
     # A widget that draws a text box.
     class Textbox < Box
-      attr_accessor :font, :size, :bold, :id, :align, :text
+      attr_accessor :font, :size, :id, :align, :text
 
       ##
       # Initialize a new text box widget.
@@ -198,16 +198,15 @@ module SyncSign
       # @param bgcolour [Symbol] The background colour used for the text box.
       # @param font [Symbol] The font to use when drawing the text.
       # @param size [Integer] The point size to use when drawing the text.
-      # @param bold [Boolean] Whether the text should be bold or not.
       # @param align [Symbol] Whether to align the text left, center, or right.
       # @param text [String] The text to draw in the box.
       # @param id [String] An ID value to attach to the text box.
-      def initialize(x: nil, y: nil, width: nil, height: nil, colour: :black, bgcolour: :white, font: nil, size: nil, bold: false, id: nil, align: :left, text: nil)
+      def initialize(x: nil, y: nil, width: nil, height: nil, colour: :black, bgcolour: :white, font: nil, size: nil, id: nil, align: :left, text: nil)
+        check_font(font: font, size: size)
         raise(AlignmentException, "Textbox: either y or height must be a multiple of 8") if y % 8 != 0 and height % 8 != 0
         raise(AlignmentException, "Textbox: width must be a multiple of 8") if width % 8 != 0
         @font = font.upcase
         @size = size
-        @bold = bold
         @id = id
         @align = align
         @text = text
@@ -227,6 +226,32 @@ module SyncSign
             'text': @text
           }
         }
+      end
+
+      def check_font(font: nil, size: nil)
+        available_sizes = {
+          :ddin => [16, 24, 32, 48, 64, 128],
+          :ddin_condensed => [16, 24, 32, 48, 64],
+          :charriot => [10],
+          :aprilsans => [10, 16, 24],
+          :roboto_condensed => [24, 48],
+          :roboto_slab => [24, 48],
+          :yanone_kaffeesatz => [24, 44],
+          :kaushan_script => [20, 32],
+          :sriracha => [24],
+          :dorsa => [32],
+          :londrina_outline => [36],
+          :bungee_shade => [36],
+          :noto_serif => [16],
+          :noto_sans => [24, 40]
+        }
+
+        if(!available_sizes.keys.include? font) then
+          raise ArgumentError, "#{font} is not a valid font. Available fonts: #{available_sizes.keys}"
+        end
+        if(!available_sizes[font].include? size) then
+          raise ArgumentError, "#{font} is not available in size #{size}. Available sizes for this font: #{available_sizes[font].join(", ")}"
+        end
       end
     end
 
