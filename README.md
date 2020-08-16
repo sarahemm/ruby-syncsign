@@ -1,4 +1,4 @@
-# SyncSign - Ruby interface to the SyncSign e-paper display system.
+# SyncSign - Ruby interface to the SyncSign e-paper display system
 
 ## Description
 
@@ -7,6 +7,12 @@ Ruby class/gem to access the [SyncSign](http://sync-sign.com) cloud service to d
 ## Features
  * Display circles, lines, rectangles, QR codes, and text on the displays.
  * Obtain information about associated hubs and displays.
+
+## TODO
+ * Support non-display nodes that connect to the SyncSign hub (like temperature or occupancy sensors)
+ * Support display-resident images (item type IMAGE)
+ * Support bitmap images from a URI (item type BITMAP\_URI)
+ * Support icons in text boxes
 
 ## Use
 
@@ -26,7 +32,7 @@ Create a SyncSign Service instance using your API key (found in the SyncSign por
 ## Examples
 
 Check out the examples/ folder for:
- * account_info.rb - Show information about the account associated with the provided API key.
+ * account\_info.rb - Show information about the account associated with the provided API key.
  * nodes.rb - List all nodes on the system and information about them.
  * render.rb - Render a sample screen to the given node.
 
