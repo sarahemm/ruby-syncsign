@@ -5,7 +5,7 @@ module SyncSign
   # Object that represents a template that can be rendered onto a display.
   # Contains +Widget+s which define the UI elements on the +Template+.
   class Template
-    attr_accessor :background, :pollrate
+    attr_accessor :bgcolour, :pollrate
     attr_reader :items
 
     ##
@@ -14,8 +14,8 @@ module SyncSign
     # @param items [Array] List of Widgets to add to the template.
     # @param pollrate [Integer] How often (in ms) the node should poll the hub
     #   for new information.
-    def initialize(background: {}, items: [], pollrate: 10000)
-      @background = background
+    def initialize(bgcolour: :white, items: [], pollrate: 10000)
+      @bgcolour = bgcolour
       @pollrate = pollrate
       
       @items = []
@@ -35,11 +35,12 @@ module SyncSign
     ##
     # Output this template as JSON in the format that the SyncSign service understands.
     def to_s
-      options = {'pollRate': @pollrate}
+      background = {bgColor: @bgcolour.to_s.upcase}
       items = @items.collect { |item| item.to_a }
+      options = {'pollRate': @pollrate}
       {
         layout: {
-          background: @background,
+          background: background,
           items: items,
           options: options
         }

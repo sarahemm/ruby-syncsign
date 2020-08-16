@@ -13,10 +13,6 @@ end
 apikey = ARGV[0]
 nodeid = ARGV[1]
 
-background = {
-  'bgColor': 'WHITE',
-}
-
 items = [
   SyncSign::Widget::Rectangle.new(x: 8, y: 8, width: 208, height: 60, pen_width: 2),
   SyncSign::Widget::Textbox.new(x: 16, y: 16, width: 192, height: 44, font: :roboto_slab, size: 24, align: :center, text: "Hello, World!"),
@@ -34,10 +30,8 @@ if(signsvc.node(nodeid).has_colour?) then
 end
 
 # assemble the template and send it to the SyncSign service
-tmpl = SyncSign::Template.new(
-  background: background,
-  items: items
-)
+tmpl = SyncSign::Template.new(items: items)
+
 #puts tmpl.to_s
 puts "Sending render request to SyncSign service..."
 signsvc.node(nodeid).render(template: tmpl)
