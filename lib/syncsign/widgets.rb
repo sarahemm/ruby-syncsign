@@ -44,8 +44,8 @@ module SyncSign
 
       def initialize(x: nil, y: nil, width: nil, height: nil, colour: :black, bgcolour: :white)
         Widget::check_colours [colour, bgcolour]
-        @colour = colour.to_s.upcase
-        @bgcolour = bgcolour.to_s.upcase
+        @colour = colour
+        @bgcolour = bgcolour
         @width = width
         @height = height
         super(x: x, y: y)
@@ -84,10 +84,10 @@ module SyncSign
           'type': 'RECTANGLE',
           'data': {
             'block': {x: @x, y: @y, w: @width, h: @height},
-            'fillColor': @bgcolour,
-            'fillPattern': @fillpattern,
-            'strokeColor': @colour,
-            'strokePattern': @strokepattern,
+            'fillColor': @bgcolour.to_s.upcase,
+            'fillPattern': @fillpattern.to_s.upcase,
+            'strokeColor': @colour.to_s.upcase,
+            'strokePattern': @strokepattern.to_s.upcase,
             'strokeThickness': @pen_width
           }
         }
@@ -117,9 +117,9 @@ module SyncSign
         @y0 = y0
         @x1 = x1
         @y1 = y1
-        @colour = colour.to_s.upcase
-        @bgcolour = bgcolour.to_s.upcase
-        @pattern = pattern.to_s.upcase
+        @colour = colour
+        @bgcolour = bgcolour
+        @pattern = pattern
       end
       
       ##
@@ -129,9 +129,9 @@ module SyncSign
           'type': 'LINE',
           'data': {
             'block': {x0: @x0, y0: @y0, x1: @x1, y1: @y1},
-            'backgroundColor': @bgcolour,
-            'lineColor': @colour,
-            'linePattern': @pattern
+            'backgroundColor': @bgcolour.to_s.upcase,
+            'lineColor': @colour.to_s.upcase,
+            'linePattern': @pattern.to_s.upcase
           }
         }
       end
@@ -147,20 +147,22 @@ module SyncSign
       # @param x [Integer] horizontal position of the centre of the circle.
       # @param y [Integer] vertical position of the centre of the circle
       # @param radius [Integer] The radius of the circle in pixels.
-      # @param colour [Symbol] The stroke colour used for the rectangle
+      # @param colour [Symbol] The stroke colour used for the circle
       #   (either black, white, or red).
-      # @param bgcolour [Symbol] The fill colour used for the rectangle
+      # @param bgcolour [Symbol] The fill colour used for the circle
       #   (either black, white, or red).
       # @param fillpattern [Symbol] The fill pattern to use when filling the circle.
       # @param strokepattern [Symbol] The stroke pattern to use when drawing the circle.
-      def initialize(x: nil, y: nil, radius: nil, bgcolour: :white, colour: :black, fillpattern: :none, strokepattern: :solid)
+      # @param pen_width [Integer] The thickness in pixels of the stroke.
+      def initialize(x: nil, y: nil, radius: nil, bgcolour: :white, colour: :black, fillpattern: :none, strokepattern: :solid, pen_width: 1)
         Widget::check_colours [colour, bgcolour]
         Widget::check_patterns [fillpattern, strokepattern]
         @radius = radius
-        @colour = colour.to_s.upcase
-        @bgcolour = bgcolour.to_s.upcase
-        @fillpattern = fillpattern.to_s.upcase
-        @strokepattern = strokepattern.to_s.upcase
+        @colour = colour
+        @bgcolour = bgcolour
+        @fillpattern = fillpattern
+        @strokepattern = strokepattern
+        @pen_width = pen_width
         super(x: x, y:y)
       end
       
@@ -171,10 +173,11 @@ module SyncSign
           'type': 'CIRCLE',
           'data': {
             'center': {x: @x, y: @y},
-            'fillColor': @bgcolour,
-            'fillPattern': @fillpattern,
-            'strokeColor': @colour,
-            'strokePattern': @strokepattern
+            'fillColor': @bgcolour.to_s.upcase,
+            'fillPattern': @fillpattern.to_s.upcase,
+            'strokeColor': @colour.to_s.upcase,
+            'strokePattern': @strokepattern.to_s.upcase,
+            'strokeThickness': @pen_width
           }
         }
       end
@@ -206,7 +209,7 @@ module SyncSign
         @size = size
         @bold = bold
         @id = id
-        @align = align.to_s.upcase
+        @align = align
         @text = text
         super(x: x, y: y, width: width, height: height, colour: colour, bgcolour: bgcolour)
       end
@@ -218,8 +221,8 @@ module SyncSign
           'type': 'TEXT',
           'data': {
             'block': {x: @x, y: @y, w: @width, h: @height},
-            'textColor': @colour,
-            'textAlign': @align,
+            'textColor': @colour.to_s.upcase,
+            'textAlign': @align.to_s.upcase,
             'font': "#{@font}_#{@size.to_s}",
             'text': @text
           }
