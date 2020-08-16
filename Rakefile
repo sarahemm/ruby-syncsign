@@ -1,15 +1,24 @@
 require 'bundler'
 Bundler.setup
 
-require "rspec"
-require "rspec/core/rake_task"
+begin
+  require 'rspec/core/rake_task'
+  RSpec::Core::RakeTask.new(:spec)
+rescue LoadError
+end
 
 $LOAD_PATH.unshift File.expand_path("../lib", __FILE__)
 require "syncsign/version"
+require "yard"
+
+YARD::Rake::YardocTask.new do |t|
+  t.files = ['lib/**/*.rb']
+  t.options = %w(--markup-provider=redcarpet --markup=markdown --main=README.md)
+end
 
 desc "Builds the gem"
 task :gem => :build
-task :build do
+task :build => :yard do
   system "gem build syncsign.gemspec"
   Dir.mkdir("pkg") unless Dir.exists?("pkg")
   system "mv syncsign-#{SyncSign::VERSION}.gem pkg/"

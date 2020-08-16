@@ -1,8 +1,21 @@
 module SyncSign
+  ##
+  # Object that represents a SyncSign node.
+  # TODO: Split this up and add support for non-display nodes.
   class Node
-    attr_reader :id, :name, :battery, :signal
-    attr_accessor :online
-
+    # @return [String] the Node ID of this node.
+    attr_reader :id
+    # @return [String] the friendly name of this node.
+    attr_reader :name
+    # @return [Integer] the current battery level of this node (0-100)
+    attr_reader :battery
+    # @return [Integer] the current signal level of this node (0-100)
+    attr_reader :signal
+    # @return [Boolean] whether the node is online or offline.
+    attr_reader :online
+    
+    ##
+    # Initialize a new Node object (normally only called from Hub#nodes or Service#nodes).
     def initialize(service: nil, id: nil, name: nil, online: nil, battery: nil, signal: nil)
       @service = service
       @id = id
@@ -12,10 +25,17 @@ module SyncSign
       @signal = signal
     end
 
+    ##
+    # Render a template to this display.
+    # @param template [Template] Template to render to this display.
     def render(template: nil)
       @service.api_call(type: :post, path: "/nodes/#{@id}/renders", data: template.to_s)
     end
 
+    ##
+    # Parse a JSON description of a single node into a +Node+ object.
+    # Normally only called from Hub#nodes or Service#nodes.
+    # @api private
     def self.parse(service: nil, nodeinfo: nil)
       Node.new(
         service: service,
@@ -26,10 +46,15 @@ module SyncSign
         signal: nodeinfo['signalLevel']
       )
     end
-  end
-
-  class Nodes
-    def self.parse(service: nil, nodeinfo: nil)
+    
+    ##
+    # Parse JSON array of nodes into a collection of Node objects.
+    # @param service [SyncSign::Service] Instance of the SyncSign Service class.
+    # @param nodeinfo [String] Information about a collection of nodes,
+    #   in JSON format.
+    # @return [Array] Array of Node objects.
+    # @api private
+    def self.parse_collection(service: nil, nodeinfo: nil)
       nodes = []
       nodeinfo.each do |node|
         nodes.push Node::parse(service: service, nodeinfo: node)

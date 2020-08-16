@@ -1,21 +1,36 @@
 require 'net/http'
 require 'json'
 
+##
+# The SyncSign module contains everything needed to interface with the
+# SyncSign cloud server and display information on their e-paper displays.
 module SyncSign
+  ##
+  # Raised if an error occurs communicating with the SyncSign cloud service.
   class APICallException < StandardError
   end
 
+  ##
+  # Object that communicates with the SyncSign cloud service.
   class Service
+    ##
+    # Set up a new connection to the SyncSign cloud service.
+    # @param apikey [String] the API key provided through the SyncSign portal.
     def initialize(apikey: null)
       @apikey = apikey
       @baseurl = "https://api.sync-sign.com/v2/key/#{apikey}"
     end
 
+    ##
+    # Retrieve an array of information about the SyncSign cloud service account
+    # associated with this object.
     def account_info()
       api_call()
     end
-
-    def hubs()
+    
+    ##
+    # Retrieve a collection of all +Hub+ objects registered under the account.
+    def hubs
       hubs = []
       hub_data = api_call(path: "/devices")
       hub_data.each do |hub|
@@ -29,14 +44,25 @@ module SyncSign
       hubs
     end
 
+    ##
+    # Retrieve a collection of all +Node+ objects registered under the account.
     def nodes()
-      Nodes::parse(service: self, nodeinfo: api_call(path: "/nodes"))
+      Node::parse_collection(service: self, nodeinfo: api_call(path: "/nodes"))
     end
 
+    ##
+    # Retrieve a single +Node+ object with the given id.
+    # @param id [String] Node ID to retrieve the object for.
     def node(id)
       Node::parse(service: self, nodeinfo: api_call(path: "/nodes/#{id}"))
     end
 
+    ##
+    # Make a call to the SyncSign cloud service.
+    # @param type [Symbol] The HTTP method to use, either :get or :put.
+    # @param path [String] The path to make the API call to, minus the base path.
+    # @param data [String] The POST data to send with the API call.
+    # @api private
     def api_call(type: :get, path: "", data: "")
       apiurl = URI.parse("#{@baseurl}#{path}")
       http_obj = Net::HTTP.new(apiurl.host, apiurl.port)
