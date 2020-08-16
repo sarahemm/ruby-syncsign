@@ -11,5 +11,12 @@ if(!ARGV[0]) then
 end
 
 signsvc = SyncSign::Service.new(apikey: ARGV[0])
-pp signsvc.nodes
+signsvc.nodes.each do |node|
+  puts "Node #{node.id}: #{node.name || '(unnamed)'}"
+  puts "\tModel: #{node.model}"
+  puts "\tHas Colour: #{node.has_colour? ? "Yes" : "No"}"
+  puts "\tIs Online: #{node.is_online? ? "Yes" : "No"}"
+  puts "\tBattery: #{node.battery || 'Unavailable'}"
+  puts "\tSignal: #{node.signal || 'Unavailable'}\n\n"
+end
 
