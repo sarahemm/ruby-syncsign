@@ -9,7 +9,6 @@ module SyncSign
   ##
   # Widgets are UI elements that are placed onto a +Template+ for rendering.
   class Widget
-
     ##
     # An item that contains only x/y coordinates. This can't be used on its own, only its
     # superclasses can be added to templates.
@@ -44,6 +43,7 @@ module SyncSign
       attr_accessor :bgcolour
 
       def initialize(x: nil, y: nil, width: nil, height: nil, colour: :black, bgcolour: :white)
+        Widget::check_colours [colour, bgcolour]
         @colour = colour.to_s.upcase
         @bgcolour = bgcolour.to_s.upcase
         @width = width
@@ -68,9 +68,12 @@ module SyncSign
       # @param bgcolour [Symbol] The fill colour used for the rectangle
       #   (either black, white, or red).
       # @param pen_width [Integer] The width in pixels of the stroke.
-      def initialize(x: nil, y: nil, width: nil, height: nil, colour: :black, bgcolour: :white, pen_width: 1)
+      def initialize(x: nil, y: nil, width: nil, height: nil, colour: :black, bgcolour: :white, pen_width: 1, fillpattern: :none, strokepattern: :solid)
+        Widget::check_patterns [fillpattern, strokepattern]
         raise(AlignmentException, "Rect: x and width must both be a multiple of 8") if x % 8 != 0 or width % 8 != 0
         @pen_width = pen_width
+        @fillpattern = fillpattern
+        @strokepattern = strokepattern
         super(x: x, y: y, width: width, height: height, colour: colour, bgcolour: bgcolour)
       end
       
@@ -82,7 +85,9 @@ module SyncSign
           'data': {
             'block': {x: @x, y: @y, w: @width, h: @height},
             'fillColor': @bgcolour,
+            'fillPattern': @fillpattern,
             'strokeColor': @colour,
+            'strokePattern': @strokepattern,
             'strokeThickness': @pen_width
           }
         }
@@ -106,6 +111,8 @@ module SyncSign
       #   (either black, white, or red).
       # @param pattern [Symbol] The linestyle to use when drawing the line, one of solid, interleave, dash_tiny, dash_mid, or dash_wide.
       def initialize(x0: nil, y0: nil, x1: nil, y1: nil, bgcolour: :white, colour: :black, pattern: :solid)
+        Widget::check_colours [colour, bgcolour]
+        Widget::check_patterns [pattern]
         @x0 = x0
         @y0 = y0
         @x1 = x1
@@ -133,7 +140,7 @@ module SyncSign
     ##
     # A widget that draws a circle.
     class Circle < Item
-      attr_accessor :radius, :bgcolour, :colour, :pattern
+      attr_accessor :radius, :bgcolour, :colour, :fillpattern, :strokepattern
 
       ##
       # Initialize a new circle widget.
@@ -146,7 +153,9 @@ module SyncSign
       #   (either black, white, or red).
       # @param fillpattern [Symbol] The fill pattern to use when filling the circle.
       # @param strokepattern [Symbol] The stroke pattern to use when drawing the circle.
-      def initialize(x: nil, y: nil, radius: nil, bgcolour: :white, colour: :black, fillpattern: :hollow, strokepattern: :solid)
+      def initialize(x: nil, y: nil, radius: nil, bgcolour: :white, colour: :black, fillpattern: :none, strokepattern: :solid)
+        Widget::check_colours [colour, bgcolour]
+        Widget::check_patterns [fillpattern, strokepattern]
         @radius = radius
         @colour = colour.to_s.upcase
         @bgcolour = bgcolour.to_s.upcase
@@ -192,7 +201,7 @@ module SyncSign
       # @param id [String] An ID value to attach to the text box.
       def initialize(x: nil, y: nil, width: nil, height: nil, colour: :black, bgcolour: :white, font: nil, size: nil, bold: false, id: nil, align: :left, text: nil)
         raise(AlignmentException, "Textbox: either y or height must be a multiple of 8") if y % 8 != 0 and height % 8 != 0
-        raies(AlignmentException, "Textbox: width must be a multiple of 8") if width % 8 != 0
+        raise(AlignmentException, "Textbox: width must be a multiple of 8") if width % 8 != 0
         @font = font.upcase
         @size = size
         @bold = bold
@@ -266,6 +275,20 @@ module SyncSign
             'text': @text
           }
         }
+      end
+    end
+
+    def self.check_colours(colours)
+      colours.each do |colour|
+        next if [:white, :black, :red].include? colour
+        raise ArgumentError, "Colour must be :white, :black, or :red."
+      end
+    end
+    
+    def self.check_patterns(patterns)
+      patterns.each do |pattern|
+        next if [:solid, :interleave, :dash_tiny, :dash_medium, :dash_wide, :none].include? pattern
+        raise ArgumentError, "Pattern must be :solid, :interleave, :dash_tiny, :dash_medium, :dash_wide, or :none."
       end
     end
   end
