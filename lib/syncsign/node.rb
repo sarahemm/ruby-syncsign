@@ -13,16 +13,19 @@ module SyncSign
     attr_reader :signal
     # @return [Boolean] whether the node is online or offline.
     attr_reader :online
-    
+    # @return [String] model of thid node.
+    attr_reader :model
+
     ##
     # Initialize a new Node object (normally only called from Hub#nodes or Service#nodes).
-    def initialize(service: nil, id: nil, name: nil, online: nil, battery: nil, signal: nil)
+    def initialize(service: nil, id: nil, name: nil, online: nil, battery: nil, signal: nil, model: nil)
       @service = service
       @id = id
       @name = name
       @online = online
       @battery = battery
       @signal = signal
+      @model = model
     end
 
     ##
@@ -30,6 +33,12 @@ module SyncSign
     # @param template [Template] Template to render to this display.
     def render(template: nil)
       @service.api_call(type: :post, path: "/nodes/#{@id}/renders", data: template.to_s)
+    end
+
+    ##
+    # Return true if the node can display a colour other than black and white
+    def has_colour?
+      ['D29R', 'D75'].include? @model
     end
 
     ##
@@ -43,7 +52,8 @@ module SyncSign
         name: nodeinfo['name'],
         online: nodeinfo['onlined'],
         battery: nodeinfo['batteryLevel'],
-        signal: nodeinfo['signalLevel']
+        signal: nodeinfo['signalLevel'],
+        model: nodeinfo['model']
       )
     end
     
