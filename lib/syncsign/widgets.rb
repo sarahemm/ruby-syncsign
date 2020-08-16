@@ -1,5 +1,3 @@
-require 'json'
-
 module SyncSign
   ##
   # Raised when UI elements are not properly aligned.
