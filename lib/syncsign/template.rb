@@ -14,9 +14,12 @@ module SyncSign
     # @param items [Array] List of Widgets to add to the template.
     # @param pollrate [Integer] How often (in ms) the node should poll the hub
     #   for new information.
-    def initialize(bgcolour: :white, items: [], pollrate: 10000)
+    # @param enable_buttons [Boolean] Whether to enable the button labels at
+    #   the bottom of the screen.
+    def initialize(bgcolour: :white, items: [], pollrate: 10000, enable_buttons: false)
       @bgcolour = bgcolour
       @pollrate = pollrate
+      @enable_buttons = enable_buttons
       
       @items = []
       items.each do |item|
@@ -35,7 +38,10 @@ module SyncSign
     ##
     # Output this template as JSON in the format that the SyncSign service understands.
     def to_s
-      background = {bgColor: @bgcolour.to_s.upcase}
+      background = {
+        bgColor: @bgcolour.to_s.upcase,
+        enableButtonZone: @enable_buttons
+      }
       items = @items.collect { |item| item.to_a }
       options = {'pollRate': @pollrate}
       {
