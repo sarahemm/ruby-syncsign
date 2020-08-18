@@ -199,9 +199,10 @@ module SyncSign
       # @param font [Symbol] The font to use when drawing the text.
       # @param size [Integer] The point size to use when drawing the text.
       # @param align [Symbol] Whether to align the text left, center, or right.
+      # @param linespacing [Integer] How much space to leave between each line.
       # @param text [String] The text to draw in the box.
       # @param id [String] An ID value to attach to the text box.
-      def initialize(x: nil, y: nil, width: nil, height: nil, colour: :black, bgcolour: :white, font: nil, size: nil, id: nil, align: :left, text: nil)
+      def initialize(x: nil, y: nil, width: nil, height: nil, colour: :black, bgcolour: :white, font: nil, size: nil, id: nil, align: :left, linespacing: 2, text: nil)
         check_font(font: font, size: size)
         raise(AlignmentException, "Textbox: either y or height must be a multiple of 8") if y % 8 != 0 and height % 8 != 0
         raise(AlignmentException, "Textbox: width must be a multiple of 8") if width % 8 != 0
@@ -209,6 +210,7 @@ module SyncSign
         @size = size
         @id = id
         @align = align
+        @linespacing = linespacing
         @text = text
         super(x: x, y: y, width: width, height: height, colour: colour, bgcolour: bgcolour)
       end
@@ -216,13 +218,17 @@ module SyncSign
       ##
       # Convert the widget into an array for sending to the SyncSign service.
       def to_a
+        font_string = "#{@font}_#{@size.to_s}"
+        # this one font has to be specified in a different way
+        font_string += "_B" if @font.to_s.upcase == "YANONE_KAFFEESATZ"
         {
           'type': 'TEXT',
           'data': {
             'block': {x: @x, y: @y, w: @width, h: @height},
             'textColor': @colour.to_s.upcase,
             'textAlign': @align.to_s.upcase,
-            'font': "#{@font}_#{@size.to_s}",
+            'font': font_string,
+            'lineSpace': @linespacing,
             'text': @text
           }
         }
@@ -305,6 +311,44 @@ module SyncSign
             'version': @version,
             'position': {x: @x, y: @y},
             'text': @text
+          }
+        }
+      end
+    end
+
+    ##
+    # A widget that draws button labels for the 4.2" display.
+    class ButtonLabels
+      # @return [Array] Up to 4 strings of 17 characters each, to label the buttons with.
+      attr_accessor :labels
+      # @return [Array] Up to 4 boolean values showing whether each button should be reverse colours.
+      attr_accessor :reversed
+      
+      ##
+      # Initialize a new Button Labels widget.
+      # @param labels [Array] Up to 4 strings of 17 characters each, to label the buttons with.
+      # @param reversed [Array] Up to 4 boolean values showing whether each button should be reverse colours (white on black). Default is black on white.
+      def initialize(labels: [], reversed: [])
+        # TODO: validate <= 17 characters in each label
+        @labels = labels
+        @reversed = reversed
+      end
+
+      ##
+      # Convert the widget into an array for sending to the SyncSign service.
+      def to_a
+        label_arr = []
+        (0..3).each do |idx|
+          label_arr[idx] = {
+            :title => @labels[idx] || "",
+            :style => @reversed[idx] || 'DISABLED'
+          }
+        end
+
+        {
+          'type': 'BOTTOM_CUSTOM_BUTTONS',
+          'data': {
+            'list': label_arr
           }
         }
       end
