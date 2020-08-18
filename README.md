@@ -36,3 +36,5 @@ Check out the examples/ folder for:
  * nodes.rb - List all nodes on the system and information about them.
  * render.rb - Render a sample screen to the given node.
 
+## Full Documentation
+YARD docs included, also available on [RubyDoc.info](https://www.rubydoc.info/github/sarahemm/ruby-syncsign/master)
