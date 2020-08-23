@@ -16,7 +16,7 @@ module SyncSign
 
     ##
     # Initialize a new Node object (normally only called from Hub#nodes or Service#nodes).
-    def initialize(service: nil, id: nil, name: nil, online: nil, battery: nil, signal: nil, model: nil)
+    def initialize(service: nil, id: nil, name: nil, online: nil, battery: nil, signal: nil, model: nil, hubid: nil)
       @service = service
       @id = id
       @name = name
@@ -24,12 +24,19 @@ module SyncSign
       @battery = battery
       @signal = signal
       @model = model
+      @hubid = hubid
     end
 
     ##
     # Return true if the node was online during the last information gathering.
     def is_online?
       @online
+    end
+
+    ##
+    # Return the hub that this node is associated with
+    def hub
+      Hub.new(service: @service, sn: @hubid)
     end
 
     ##
@@ -50,7 +57,8 @@ module SyncSign
         online: nodeinfo['onlined'],
         battery: nodeinfo['batteryLevel'],
         signal: nodeinfo['signalLevel'],
-        model: nodeinfo['model']
+        model: nodeinfo['model'],
+        hubid: nodeinfo['thingName']
       )
     end
     

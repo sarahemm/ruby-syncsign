@@ -6,7 +6,7 @@ module SyncSign
     # Render a template to this display.
     # @param template [Template] Template to render to this display.
     def render(template: nil)
-      @service.api_call(type: :post, path: "/nodes/#{@id}/renders", data: template.to_s)
+      @service.api_call(type: :post, path: "/nodes/#{@id}/renders", data: template.to_s, node: self, direct: @service.direct_rendering?)
     end
 
     ##

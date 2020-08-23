@@ -5,13 +5,15 @@ $:.unshift "#{File.dirname(__FILE__)}/../lib"
 require 'syncsign.rb'
 require 'pp'
 
-if(!ARGV[0]) then
-  puts "usage: #{$0} apikey nodeid"
+if(!ARGV.length.between?(2, 3)) then
+  puts "usage: #{$0} apikey nodeid [render_direct]"
+  puts "render_direct: 'yes' to send render requests directly to hub, bypassing the cloud service"
   Kernel.exit 1
 end
 
 apikey = ARGV[0]
 nodeid = ARGV[1]
+render_direct = ARGV[2] ? true : false
 
 items = [
   SyncSign::Widget::Rectangle.new(x: 8, y: 8, width: 208, height: 60, pen_width: 2),
@@ -22,7 +24,7 @@ items = [
   SyncSign::Widget::Circle.new(x: 112, y: 96, radius: 16, pen_width: 2)
 ]
 
-signsvc = SyncSign::Service.new(apikey: apikey)
+signsvc = SyncSign::Service.new(apikey: apikey, render_direct: render_direct)
 
 # make the text red if the display supports that
 if(signsvc.node(nodeid).has_colour?) then
@@ -32,7 +34,13 @@ end
 # assemble the template and send it to the SyncSign service
 tmpl = SyncSign::Template.new(items: items)
 
-#puts tmpl.to_s
+if(render_direct) then
+  if(signsvc.node(nodeid).hub.direct_rendering_capable?) then
+    puts "Using direct rendering."
+  else
+    puts "Unable to use direct rendering, check signhubs.cfg."
+  end
+end
 puts "Sending render request to SyncSign service..."
 signsvc.node(nodeid).render(template: tmpl)
 

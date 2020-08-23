@@ -16,8 +16,11 @@ module SyncSign
     ##
     # Set up a new connection to the SyncSign cloud service.
     # @param apikey [String] the API key provided through the SyncSign portal.
-    def initialize(apikey: null)
+    # @param render_direct [Boolean] try to send renders directly to the hub,
+    # bypassing the cloud service.
+    def initialize(apikey: nil, render_direct: false)
       @apikey = apikey
+      @directrender = render_direct
       @baseurl = "https://api.sync-sign.com/v2/key/#{apikey}"
     end
 
@@ -58,15 +61,27 @@ module SyncSign
     end
 
     ##
+    # Query whether we are rendering direct to the hub or via the cloud.
+    def direct_rendering?
+      @directrender
+    end
+
+    ##
     # Make a call to the SyncSign cloud service.
     # @param type [Symbol] The HTTP method to use, either :get or :put.
     # @param path [String] The path to make the API call to, minus the base path.
     # @param data [String] The POST data to send with the API call.
+    # @param direct [Boolean] Whether to try to send the call directly to the hub,
+    # bypassing the cloud service.
+    # @param node [Node] The SyncSign node that this request is associated with.
+    # Optional unless using direct rendering, in which case it is required.
     # @api private
-    def api_call(type: :get, path: "", data: "")
-      apiurl = URI.parse("#{@baseurl}#{path}")
+    def api_call(type: :get, path: "", data: "", direct: false, node: nil)
+      baseurl = @baseurl
+      baseurl = "http://#{node.hub.addr}/key/#{node.hub.apikey}" if direct and node.hub.direct_rendering_capable?
+      apiurl = URI.parse("#{baseurl}#{path}")
       http_obj = Net::HTTP.new(apiurl.host, apiurl.port)
-      http_obj.use_ssl = true
+      http_obj.use_ssl = baseurl.include?("https")
       response = nil
       http_obj.start() do |http|
         req = nil
