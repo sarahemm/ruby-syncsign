@@ -57,3 +57,6 @@ Gemfile.lock
 
 # config file containing api keys
 signhubs.cfg
+
+# quick tools to convert copy/paste from websites into symbol tables
+symbol-tables/
