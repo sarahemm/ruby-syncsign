@@ -12,7 +12,6 @@ Ruby class/gem to access the [SyncSign](http://sync-sign.com) cloud service to d
  * Support non-display nodes that connect to the SyncSign hub (like temperature or occupancy sensors)
  * Support display-resident images (item type IMAGE)
  * Support bitmap images from a URI (item type BITMAP\_URI)
- * Support icons in text boxes
 
 ## Use
 
