@@ -5,8 +5,10 @@ module SyncSign
     ##
     # Render a template to this display.
     # @param template [Template] Template to render to this display.
-    def render(template: nil)
-      @service.api_call(type: :post, path: "/nodes/#{@id}/renders", data: template.to_s, node: self, direct: @service.direct_rendering?)
+    # @param partial [Boolean] Specifies that this should be a partial update,
+    # leaving any information already on the screen in place.
+    def render(template: nil, partial: false)
+      @service.api_call(type: :post, path: "/nodes/#{@id}/renders", data: template.to_s(partial: partial), node: self, direct: @service.direct_rendering?)
     end
 
     ##

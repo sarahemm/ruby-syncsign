@@ -37,20 +37,24 @@ module SyncSign
     
     ##
     # Output this template as JSON in the format that the SyncSign service understands.
-    def to_s
+    # @param partial [Boolean] Whether to omit the background, which leaves
+    # any information already on-screen in place.
+    def to_s(partial: false)
       background = {
         bgColor: @bgcolour.to_s.upcase,
         enableButtonZone: @enable_buttons
       }
       items = @items.collect { |item| item.to_a }
       options = {'pollRate': @pollrate}
-      {
+      tmpl = {
         layout: {
           background: background,
           items: items,
           options: options
         }
-      }.to_json
+      }
+      tmpl[:layout].delete(:background) if partial
+      tmpl.to_json
     end
   end
 end
