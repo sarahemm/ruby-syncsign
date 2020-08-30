@@ -5,7 +5,7 @@
 Ruby class/gem to access the [SyncSign](http://sync-sign.com) cloud service to display information on e-paper displays.
 
 ## Features
- * Display circles, lines, rectangles, QR codes, and text on the displays.
+ * Display circles, lines, rectangles, QR codes, symbols, text, and more on the displays.
  * Obtain information about associated hubs and displays.
 
 ## TODO
@@ -29,7 +29,7 @@ Create a SyncSign Service instance using your API key (found in the SyncSign por
     node.render(template: template)
 
 ## Direct Rendering
-The SyncSign hubs have a simplified API that can be used, bypassing the cloud service. This can result in significant time savings (15s vs 25s) as well as less time between sending the request and the first visible change on the display. This is especially useful for the 4.2" model with buttons, as the time a user spends waiting after pressing a button can be significantly reduced.
+The SyncSign hubs have a simplified API that can be used, bypassing the cloud service. This can result in significant time savings (15s vs 25s in one example) as well as less time between sending the request and the first visible change on the display. This is especially useful for the 4.2" model with buttons, as the time a user spends waiting after pressing a button can be significantly reduced.
 
 To enable direct rendering, create a file named signhubs.cfg in either the same directory as your app, the current directory, or /etc/signhubs.cfg. This file should have the following format:
 hub-serial-nbr  hub-ip  hub-apikey
