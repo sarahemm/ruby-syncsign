@@ -36,6 +36,11 @@ module SyncSign
           }
         }
       end
+
+      def ==(other)
+        @labels == other.labels &&
+        @reversed == other.reversed
+      end
     end
   end
 end

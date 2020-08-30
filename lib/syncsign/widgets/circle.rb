@@ -44,6 +44,19 @@ module SyncSign
           }
         }
       end
+
+      def ==(other)
+        @x == other.x                         &&
+        @y == other.x                         &&
+        @width == other.width                 &&
+        @height == other.height               &&
+        @radius == other.radius               &&
+        @bgcolour == other.bgcolour           &&
+        @colour == other.colour               &&
+        @fillpattern == other.fillpattern     &&
+        @strokepattern == other.strokepattern &&
+        @pen_width == other.pen_width
+      end
     end
   end
 end

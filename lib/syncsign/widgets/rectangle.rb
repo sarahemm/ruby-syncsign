@@ -40,6 +40,18 @@ module SyncSign
           }
         }
       end
+
+      def ==(other)
+        @x == other.x                           &&
+        @y == other.y                           &&
+        @width == other.width                   &&
+        @height == other.height                 &&
+        @colour == other.colour                 &&
+        @bgcolour == other.bgcolour             &&
+        @pen_width == other.pen_width           &&
+        @fillpattern == other.fillpattern       &&
+        @strokepattern == other.strokepattern
+      end
     end
   end
 end

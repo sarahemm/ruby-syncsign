@@ -3,7 +3,7 @@ module SyncSign
     ##
     # A widget that draws a text box.
     class Textbox < Box
-      attr_accessor :font, :size, :id, :align, :text
+      attr_accessor :font, :size, :id, :align, :text, :linespacing
 
       ##
       # Initialize a new text box widget.
@@ -79,6 +79,21 @@ module SyncSign
         if(!available_sizes[font].include? size) then
           raise ArgumentError, "#{font} is not available in size #{size}. Available sizes for this font: #{available_sizes[font].join(", ")}"
         end
+      end
+
+      def ==(other)
+        @x == other.x                           &&
+        @y == other.y                           &&
+        @width == other.width                   &&
+        @height == other.height                 &&
+        @colour == other.colour                 &&
+        @bgcolour == other.bgcolour             &&
+        @font == other.font                     &&
+        @size == other.size                     &&
+        @id == other.id                         &&
+        @linespacing == other.linespacing       &&
+        @align == other.align                   &&
+        @text == other.text
       end
     end
   end

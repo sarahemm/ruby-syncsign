@@ -48,6 +48,15 @@ module SyncSign
           }
         }
       end
+
+      def ==(other)
+        @x == other.x               &&
+        @y == other.y               &&
+        @scale == other.scale       &&
+        @version == other.version   &&
+        @ecclevel == other.ecclevel &&
+        @text == other.text
+      end
     end
   end
 end

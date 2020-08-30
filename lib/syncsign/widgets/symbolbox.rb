@@ -3,7 +3,7 @@ module SyncSign
     ##
     # A widget that draws a box of symbols.
     class Symbolbox < Box
-      attr_accessor :type, :symbols
+      attr_accessor :type, :symbols, :id
 
       ##
       # Initialize a new symbol box widget.
@@ -61,6 +61,18 @@ module SyncSign
         end
 
         symbol_str
+      end
+
+      def ==(other)
+        @x == other.x                           &&
+        @y == other.y                           &&
+        @width == other.width                   &&
+        @height == other.height                 &&
+        @colour == other.colour                 &&
+        @bgcolour == other.bgcolour             &&
+        @type == other.type                     &&
+        @id == other.id                         &&
+        @symbols == other.symbols
       end
     end
   end
