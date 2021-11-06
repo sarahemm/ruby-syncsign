@@ -36,6 +36,7 @@ module SyncSign
           'type': 'CIRCLE',
           'data': {
             'center': {x: @x, y: @y},
+            'radius': @radius,
             'fillColor': @bgcolour.to_s.upcase,
             'fillPattern': @fillpattern.to_s.upcase,
             'strokeColor': @colour.to_s.upcase,
